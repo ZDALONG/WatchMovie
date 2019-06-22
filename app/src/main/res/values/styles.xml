@@ -1,0 +1,18 @@
+<resources>
+
+  <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <item name="colorPrimary">#8bc34a</item>
+    <item name="colorPrimaryDark">#8bc34a</item>
+    <item name="colorAccent">@color/green</item>
+    <item name="colorButtonNormal">#9ccc65</item>
+  </style>
+
+
+  <style name="customProgressBar" parent="@android:style/Widget.ProgressBar.Horizontal">
+    <item name="android:maxHeight">4.0dip</item>
+    <item name="android:indeterminateDrawable">@drawable/progress_bar_h5</item>
+    <item name="android:progressDrawable">@drawable/progress_bar_h5</item>
+    <item name="android:minHeight">4.0dip</item>
+  </style>
+
+</resources>
