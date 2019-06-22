@@ -98,10 +98,6 @@ public class HomeActivity extends AppCompatActivity implements Runnable{
                         db.insert("Href",null,values);
                     }
 
-                    //ContentValues values = new ContentValues();
-                    //db.delete("Href",null,null);//这里表示删除Href表里的全部数据
-                    //存入数据库
-
                     Toast.makeText(HomeActivity.this, "已更新数据", Toast.LENGTH_SHORT).show();
                     Log.i(TAG,"movie:list1="+ list1);
                 }
@@ -129,7 +125,7 @@ public class HomeActivity extends AppCompatActivity implements Runnable{
         ArrayList<String>hrefList = new ArrayList<String>();
         try {
 
-            for (int count = 0; count<40; count=count+25){
+            for (int count = 0; count<25; count=count+25){
                 String url = String.format("https://movie.douban.com/top250?start=%s&filter=",count);
                 doc = Jsoup.connect(url).get();
 

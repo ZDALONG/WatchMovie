@@ -90,7 +90,7 @@ public class MoviePageActivity extends AppCompatActivity implements Runnable{
                 movHref.add(pages);
             }while(cursor.moveToNext());
         }
-        cursor.close();
+        //cursor.close();
         Log.d("xfhy","movHref = "+movHref);
 
         datasDBHelper = new DatasDBHelper(MoviePageActivity.this, "Data.db", null, 1);
@@ -148,7 +148,7 @@ public class MoviePageActivity extends AppCompatActivity implements Runnable{
                         }
                     } while (cursor.moveToNext());
                 }
-                cursor.close();
+                //cursor.close();
             }
         });
 

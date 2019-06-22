@@ -1,15 +1,15 @@
 package com.gu.cardstackviewpager.activity;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Picture;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.telephony.CellIdentityCdma;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,12 +18,14 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.gu.cardstackviewpager.R;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import static android.media.CamcorderProfile.get;
@@ -42,6 +44,7 @@ public class GridView1Activity extends AppCompatActivity implements Runnable{
             R.drawable.p0, R.drawable.p1, R.drawable.p2,R.drawable.p3,R.drawable.p4,R.drawable.p5,R.drawable.p6,R.drawable.p7,R.drawable.p8,
             R.drawable.p9,R.drawable.p10,R.drawable.p11,R.drawable.p12,R.drawable.p13,R.drawable.p14,R.drawable.p15,R.drawable.p16,R.drawable.
             p17,R.drawable.p18, R.drawable.p19,R.drawable.p20,R.drawable.p21,R.drawable.p22,R.drawable.p23,R.drawable.p24};
+    MyGridViewAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +77,7 @@ public class GridView1Activity extends AppCompatActivity implements Runnable{
                     count = bdl.getIntegerArrayList("data");
                     Log.i(TAG,"count = "+count);
 
-                    MyGridViewAdapter adapter = new MyGridViewAdapter(titles,images, GridView1Activity.this);
+                    adapter = new MyGridViewAdapter(titles,images, GridView1Activity.this);
                     mGV1.setAdapter(adapter);
                 }
                 super.handleMessage(msg);
@@ -86,13 +89,62 @@ public class GridView1Activity extends AppCompatActivity implements Runnable{
         {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id)
             {
-                /*Intent intent = new Intent(GridView1Activity.this,MoviePageActivity.class);
-                intent.putExtra("numberGV", getTitle());*/
-                  Log.i(TAG, "title=" + "");
-                //startActivity(intent);
-               // Toast.makeText(GridView1Activity.this, "pic" + (position+1), Toast.LENGTH_SHORT).show();
+                LinearLayout linearLayout = (LinearLayout) mGV1.getAdapter().getView(position,v,null);
+                TextView textView = (TextView) linearLayout.getChildAt(1);
+                Log.i(TAG, "title=" + textView.getText());
+
+                Intent intent = new Intent(GridView1Activity.this,MoviePageActivity.class);
+                intent.putExtra("number", textView.getText());
+                startActivity(intent);
+
             }
         });
+
+    mGV1.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+           @Override
+           public boolean onItemLongClick(AdapterView<?> parent, final View view, final int position, long id) {
+               Log.i(TAG, "onItemLongClick: 长按列表项position=" + position);
+               //删除操作
+               //构造对话框进行确认操作
+                AlertDialog.Builder builder = new AlertDialog.Builder(GridView1Activity.this);
+                builder.setTitle("提示").setMessage("请确认是否删除当前数据").setPositiveButton("是",new DialogInterface.OnClickListener(){
+
+                   @Override
+                   public void onClick(DialogInterface dialog, int which) {
+                       Log.i(TAG, "onClick: 对话框事件处理");
+
+                       LinearLayout linearLayout = (LinearLayout) mGV1.getAdapter().getView(position,view,null);
+                       TextView textView = (TextView) linearLayout.getChildAt(1);
+                       String s = (String) textView.getText();
+                       Log.i(TAG, "title=" + textView.getText());
+
+                       datasDBHelper  = new DatasDBHelper(GridView1Activity.this,"Data.db",null,1);
+                       SQLiteDatabase db = datasDBHelper.getWritableDatabase();
+                       db.delete("Want", "numWant = ?",new String[]{String.valueOf(s)});
+
+                       Iterator iterator = count.iterator();
+                       while (iterator.hasNext()){
+                           String i = (String) iterator.next();
+                           if (i.equals(s)){
+                               iterator.remove();
+                           }
+                       }
+
+                       Log.i(TAG,"newcount = "+count);
+                       adapter = new MyGridViewAdapter(titles,images, GridView1Activity.this);
+                       mGV1.setAdapter(adapter);
+
+                       linearLayout.removeAllViews();
+                       adapter.notifyDataSetChanged();//刷新gridview
+                   }
+               }).setNegativeButton("否",null);
+               builder.create().show();
+               //Log.i(TAG, "onItemLongClick: size=" + listItems.size());
+
+               return true;
+           }
+       });
+
     }
 
     @Override
@@ -117,7 +169,7 @@ public class GridView1Activity extends AppCompatActivity implements Runnable{
                 Log.d("xfhy","pages :"+pages +"counts = "+counts);
             }while(cursor.moveToNext());
         }
-        cursor.close();
+        //cursor.close();
         bundle.putIntegerArrayList("data", counts);
 
         Message msg = handler.obtainMessage(5);
@@ -145,9 +197,6 @@ public class GridView1Activity extends AppCompatActivity implements Runnable{
                     pictures.add(picture);
                 }
             }
-
-            //Picture picture = new Picture(titles, images);
-            //pictures.add(picture);
         }
 
         @Override
@@ -171,7 +220,7 @@ public class GridView1Activity extends AppCompatActivity implements Runnable{
         }
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        public  View getView(int position, View convertView, ViewGroup parent) {
             ViewHolder viewHolder;
             if (convertView == null)
             {
@@ -193,43 +242,41 @@ public class GridView1Activity extends AppCompatActivity implements Runnable{
             public TextView title;
             public ImageView image;
         }
+    }
+}
 
-         class Picture {
-            private String title;
-            private int imageId;
+class Picture {
+    private String title;
+    private int imageId;
 
-            public Picture()
-            {
-                super();
-            }
-
-            public Picture(String title, int imageId){
-                super();
-                this.title = title;
-                this.imageId = imageId;
-            }
-
-            public String getTitle()
-            {
-                return title;
-            }
-
-            public void setTitle(String title)
-            {
-                this.title = title;
-            }
-
-            public int getImageId()
-            {
-                return imageId;
-            }
-            public void setImageId(int imageId)
-            {
-                this.imageId = imageId;
-            }
-
-        }
+    public Picture(int image, String title)
+    {
+        super();
     }
 
+    public Picture(String title, int imageId){
+        super();
+        this.title = title;
+        this.imageId = imageId;
+    }
+
+    public String getTitle()
+    {
+        return title;
+    }
+
+    public void setTitle(String title)
+    {
+        this.title = title;
+    }
+
+    public int getImageId()
+    {
+        return imageId;
+    }
+    public void setImageId(int imageId)
+    {
+        this.imageId = imageId;
+    }
 
 }

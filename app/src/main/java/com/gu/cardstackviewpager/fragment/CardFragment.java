@@ -49,9 +49,6 @@ public class CardFragment extends Fragment {
         final View v = inflater.inflate(R.layout.fragment_card, container, false);
         TextView cardNumTv = (TextView) v.findViewById(R.id.card_num_tv);
 
-        datasDBHelper = new DatasDBHelper(getActivity(), "Data.db", null, 1);
-
-
         ImageView post = v.findViewById(R.id.post);
         TextView mov_name = v.findViewById(R.id.movname);
         TextView num = v.findViewById(R.id.num);
@@ -80,10 +77,9 @@ public class CardFragment extends Fragment {
 
             @Override
             public void onClick(View v) {
-
+                datasDBHelper = new DatasDBHelper(getActivity(), "Data.db", null, 1);
                 SQLiteDatabase db = datasDBHelper.getWritableDatabase();
                 ContentValues values = new ContentValues();
-
                 Cursor cursor = db.query("Want", null, null, null, null, null, null, null);
                 if (cursor.moveToFirst()) {
                     do {
@@ -99,16 +95,10 @@ public class CardFragment extends Fragment {
                         }
                     } while (cursor.moveToNext());
                 }
-                cursor.close();
+                //cursor.close();
             }
         });
 
-        /*cardNumTv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getActivity(), "点击了" + bundle.getInt(INDEX_KEY, 0) + "", Toast.LENGTH_SHORT).show();
-            }
-        });*/
         return v;
     }
 }
