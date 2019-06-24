@@ -25,11 +25,6 @@
         </activity>
 
         <!-- 关于我的界面 -->
-        <activity
-            android:name=".activity.AboutActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateAlwaysHidden" />
 
         <!-- webview界面 -->
         <activity

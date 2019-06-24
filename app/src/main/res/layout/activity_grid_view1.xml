@@ -4,17 +4,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingBottom="16dp"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:paddingTop="16dp"
     android:orientation="vertical"
 
     tools:context=".activity.GridView1Activity">
 
     <TextView
-        android:text="@string/button_watched"
-        android:textSize="30dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:paddingLeft="20sp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:text="@string/button_want"
+        android:textAllCaps="true"
+        android:textSize="30dp" />
 
     <GridView
         android:id="@+id/GV1"

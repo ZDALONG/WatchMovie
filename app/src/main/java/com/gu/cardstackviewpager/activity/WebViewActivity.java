@@ -19,7 +19,7 @@ public class WebViewActivity extends AppCompatActivity {
 
     private WebView mWebView;
     private ProgressBar mProgressBar;
-    private String url = "https://github.com/NateRobinson";
+    private String url ;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

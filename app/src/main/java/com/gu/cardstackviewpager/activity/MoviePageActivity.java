@@ -90,10 +90,10 @@ public class MoviePageActivity extends AppCompatActivity implements Runnable{
                 movHref.add(pages);
             }while(cursor.moveToNext());
         }
-        //cursor.close();
+        cursor.close();
         Log.d("xfhy","movHref = "+movHref);
 
-        datasDBHelper = new DatasDBHelper(MoviePageActivity.this, "Data.db", null, 1);
+        datasDBHelper = new DatasDBHelper(MoviePageActivity.this, "Datas.db", null, 1);
 
         //开启子线程，启动run方法
         Thread d = new Thread(this);
@@ -147,8 +147,10 @@ public class MoviePageActivity extends AppCompatActivity implements Runnable{
                             db.insert("Want", null, values);
                         }
                     } while (cursor.moveToNext());
+                }else {
+                    Log.d("xfhy","444");
                 }
-                //cursor.close();
+                cursor.close();
             }
         });
 

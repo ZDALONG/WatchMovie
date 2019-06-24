@@ -118,14 +118,13 @@ public class GridView1Activity extends AppCompatActivity implements Runnable{
                        String s = (String) textView.getText();
                        Log.i(TAG, "title=" + textView.getText());
 
-                       datasDBHelper  = new DatasDBHelper(GridView1Activity.this,"Data.db",null,1);
+                       datasDBHelper  = new DatasDBHelper(GridView1Activity.this,"Datas.db",null,1);
                        SQLiteDatabase db = datasDBHelper.getWritableDatabase();
                        db.delete("Want", "numWant = ?",new String[]{String.valueOf(s)});
 
                        Iterator iterator = count.iterator();
                        while (iterator.hasNext()){
-                           String i = (String) iterator.next();
-                           if (i.equals(s)){
+                           if (String.valueOf(iterator.next()).equals(s)){
                                iterator.remove();
                            }
                        }
@@ -159,7 +158,7 @@ public class GridView1Activity extends AppCompatActivity implements Runnable{
             }
         }
         Bundle bundle = new Bundle();
-        datasDBHelper  = new DatasDBHelper(GridView1Activity.this,"Data.db",null,1);
+        datasDBHelper  = new DatasDBHelper(GridView1Activity.this,"Datas.db",null,1);
         SQLiteDatabase db = datasDBHelper.getWritableDatabase();
         Cursor cursor = db.query("Want", null, null, null, null, null, null, null);
         if(cursor.moveToFirst()){

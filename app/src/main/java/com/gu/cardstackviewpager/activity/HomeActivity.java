@@ -56,7 +56,7 @@ public class HomeActivity extends AppCompatActivity implements Runnable{
         mOrientedViewPager = findViewById(R.id.view_pager);
 
         //制造数据
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < movie.length; i++) {
             mFragments.add(CardFragment.newInstance(movie[i],i));
             Log.i(TAG,"neme = "+movie[i]+"number="+i);
         }

@@ -43,16 +43,21 @@ public class CardFragment extends Fragment {
         cardFragment.setArguments(bundle);
         return cardFragment;
     }
+    //datasDBHelper = new DatasDBHelper(getActivity(), "Data.db", null, 1);
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View v = inflater.inflate(R.layout.fragment_card, container, false);
         TextView cardNumTv = (TextView) v.findViewById(R.id.card_num_tv);
 
+        datasDBHelper = new DatasDBHelper(getActivity(), "Datas.db", null, 1);
+
         ImageView post = v.findViewById(R.id.post);
         TextView mov_name = v.findViewById(R.id.movname);
         TextView num = v.findViewById(R.id.num);
         Button want = v.findViewById(R.id.btn_1);
+
+
 
         final Bundle bundle = getArguments();
         final int Num = bundle.getInt(INDEX_NUM, 0);
@@ -63,6 +68,7 @@ public class CardFragment extends Fragment {
             num.setText(bundle.getInt(INDEX_NUM, 0) + "");
             post.setBackgroundDrawable(getResources().getDrawable(images[Num]));
         }
+
 
         post.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,11 +83,14 @@ public class CardFragment extends Fragment {
 
             @Override
             public void onClick(View v) {
-                datasDBHelper = new DatasDBHelper(getActivity(), "Data.db", null, 1);
+                //Toast.makeText(getActivity(), "请勿重复添加", Toast.LENGTH_SHORT).show();
+
                 SQLiteDatabase db = datasDBHelper.getWritableDatabase();
                 ContentValues values = new ContentValues();
                 Cursor cursor = db.query("Want", null, null, null, null, null, null, null);
+
                 if (cursor.moveToFirst()) {
+                    Log.d("xfhy","111");
                     do {
                         int pages = cursor.getInt(cursor.getColumnIndex("numWant"));
                         Log.d("xfhy", "pageswant :" + pages);
@@ -92,10 +101,15 @@ public class CardFragment extends Fragment {
                         } else {
                             values.put("numWant", Integer.parseInt(bundle.getInt(INDEX_NUM, 0) + ""));
                             db.insert("Want", null, values);
+                            Log.d("xfhy33","添加成功");
                         }
                     } while (cursor.moveToNext());
+                }else {
+                    values.put("numWant", Integer.parseInt(bundle.getInt(INDEX_NUM, 0) + ""));
+                    db.insert("Want", null, values);
+                    Log.d("xfhy34","添加成功");
                 }
-                //cursor.close();
+                cursor.close();
             }
         });
 
